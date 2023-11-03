@@ -1,13 +1,9 @@
-from konto import Bankkonto, BSUKonto, Sparekonto
+import test_bankkonto
 
 
 def main() -> None:
-    bankkonto = Bankkonto("Viktor", "1920.21.34098", 0)
-    bankkonto.innskudd(1000)
-    bankkonto.innskudd(2000)
-    bankkonto.uttak(1500)
-    bankkonto.uttak(2500)
-    print(bankkonto)
+    test_bankkonto.test_bankkonto()
+    test_bankkonto.test_bsukonto()
 
 
 if __name__ == "__main__":
