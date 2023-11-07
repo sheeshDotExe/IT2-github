@@ -1,0 +1,19 @@
+@startuml fotballag
+
+class Spiller {
+    + posisjon
+}
+class Trener {
+    + spesialisering
+}
+class Lag
+class Fotballklubb
+
+Lag "1..*" o-- "1" Trener
+Fotballklubb "1" *-- "0..*" Lag
+Lag "1" o-- "0..*" Spiller
+
+Fotballklubb "1" o-- "0..*" Trener
+Fotballklubb "1" o-- "0..*" Spiller
+
+@enduml
