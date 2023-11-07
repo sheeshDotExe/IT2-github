@@ -1,0 +1,29 @@
+@startuml bankkonto
+
+
+class Bankkonto {
+    + kontonummer: str
+    + saldo: float
+    --
+    + uttak(beløp: float) -> float
+    + innskudd(beløp: float) -> None
+}
+class Sparekonto{
+    # maks_antall_uttak: int
+}
+class BSUKonto{
+    # maks_beløp_innskudd: float
+}
+class Person{
+    + navn: str
+    # telefonnummer: str
+    # personnummer: str
+}
+
+Bankkonto o-- "1" Person : eier <
+
+Bankkonto <|-- Sparekonto
+Bankkonto <|-- BSUKonto
+
+
+@enduml

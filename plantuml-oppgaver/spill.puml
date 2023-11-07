@@ -1,0 +1,28 @@
+@startuml spill
+
+skinparam linetype ortho
+
+class World
+class Entity {
+    + health: float
+    + damage: float
+    ---
+    + move()
+}
+class Player
+class Enemy
+class Object
+class Inventory
+class Item
+
+World --* Player
+World --o Enemy
+World --o Object
+
+Player --|> Entity
+Enemy --|> Entity
+
+Entity <-- Inventory
+Inventory --o Item
+
+@enduml

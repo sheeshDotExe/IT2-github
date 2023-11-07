@@ -1,0 +1,29 @@
+@startuml Title
+
+skinparam linetype ortho
+'left to right direction
+class Bok {
+    + forlag: str
+    + forfatter: Forfatter
+    + tittel: str
+    + ISBN-nummer: uid
+    + utgivelsesår: uint
+    + baksidetekst: str
+}
+
+class Forfatter
+Bok  o-- Forfatter
+
+class Skjønnlitteratur
+class Fagbok
+
+Skjønnlitteratur --|> Bok
+Fagbok --|> Bok
+
+class Sjanger
+class Fagområdet
+
+Sjanger --o Skjønnlitteratur
+Fagområdet --o Fagbok
+
+@enduml
