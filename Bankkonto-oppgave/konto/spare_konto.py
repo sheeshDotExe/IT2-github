@@ -12,5 +12,6 @@ class Sparekonto(Bankkonto):
         if self.antall_uttak - 1 < 0:
             print("Du kan ikke ta ut mer penger fra denne kontoen i år")
             return
+
         self.antall_uttak -= 1
         return super().uttak(beløp=beløp)

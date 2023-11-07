@@ -2,8 +2,8 @@
 
 
 class Bankkonto {
-    + kontonummer: str
-    + saldo: float
+    - kontonummer: str
+    - saldo: float
     --
     + uttak(beløp: float) -> float
     + innskudd(beløp: float) -> None
@@ -17,7 +17,7 @@ class BSUKonto{
 class Person{
     + navn: str
     # telefonnummer: str
-    # personnummer: str
+    - personnummer: str
 }
 
 Bankkonto o-- "1" Person : eier <

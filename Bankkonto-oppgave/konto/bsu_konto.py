@@ -12,5 +12,6 @@ class BSUKonto(Bankkonto):
         if self.innskudd_i_år + Bankkonto.kroner_til_øre(beløp) > MAKS_INNSKUDD:
             print("Du kan ikke sette inn mer penger på denne kontoen")
             return
+
         self.innskudd_i_år += Bankkonto.kroner_til_øre(beløp)
         return super().innskudd(beløp)
