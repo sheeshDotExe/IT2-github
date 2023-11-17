@@ -1,0 +1,53 @@
+@startuml stafettlop
+
+class Idrettsklubb{
+    + medlemmer: Array
+    # jenter: Jente []
+    # gutter: Gutt []
+
+    + legg_til_medlem(person: Person) -> None
+    + trekk_lag(lag_strørelse: int, antall_lag) -> Lag | Lag []
+}
+
+class Stafettkonkurranse {
+    + antall_lag: int
+    + antall_løp: int
+    + løp_lengde: float
+    # lag: Array
+
+    + kjør_stafett() -> None
+    # kjør_etappe() -> list[float]
+}
+
+class Lag {
+    + antall_medlemmer: int
+    + rekkefølge: Person []
+    # jenter: Jente []
+    # gutter: Gutt []
+}
+
+class Person {
+    + kjønn: string = udefinert
+    # hastighet: float
+
+    + løp(lengde: float) -> float
+}
+class Jente {
+    + kjønn: string = jente
+    # hastighet: float
+}
+class Gutt {
+    + kjønn: string = gutt
+    # hastighet: float
+}
+
+Person <|-- Jente
+Person <|-- Gutt
+
+Idrettsklubb "0..1" -- "1..*" Person
+
+Stafettkonkurranse "1" --o "1..*" Lag
+Lag "1" o-- "1..*" Person
+
+
+@enduml
