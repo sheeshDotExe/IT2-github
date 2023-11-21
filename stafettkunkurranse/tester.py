@@ -1,7 +1,7 @@
 from implementasjon import Lag, Stafettkonkurranse
 
 
-def kjør_tester(lag: list[Lag], stafett_konkurranse: Stafettkonkurranse) -> None:
+def kjør_tester(lag: list[Lag], stafettkonkurranse: Stafettkonkurranse) -> None:
     test_lag(lag=lag)
     print("Fullførte alle tester")
 

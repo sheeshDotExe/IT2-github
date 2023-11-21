@@ -1,41 +1,38 @@
-from typing import Optional
+from typing import Optional, Literal
 import random
 import numpy as np
 
-# hastighetsintervaller for gutter og jenter
-JENTE_STØRSTE_FART = 100 / 11.5
-JENTE_MINSTE_FART = 100 / 13.5
-
-GUTT_STØRSTE_FART = 100 / 11
-GUTT_MINSTE_FART = 100 / 13
+Kjønn = Literal["gutt", "jente", "udefinert"]
 
 
 class Person:
     """Standardklasse for person"""
 
     def __init__(self, hastighet: float) -> None:
-        self.kjønn = "udefinert"
+        self.kjønn: Kjønn = "udefinert"
         self.hastighet = hastighet
 
 
 class Jente(Person):
+    __STØRSTE_FART = 100 / 11.5
+    __MINSTE_FART = 100 / 13.5
+
     def __init__(self, hastighet: Optional[float] = None) -> None:
         if not hastighet:
             # gir personen en tilfelldig hastighet fra intervallet
-            hastighet = JENTE_MINSTE_FART + random.random() * (
-                JENTE_STØRSTE_FART - JENTE_MINSTE_FART
-            )
+            hastighet = random.uniform(self.__MINSTE_FART, self.__STØRSTE_FART)
         super().__init__(hastighet)
         self.kjønn = "jente"
 
 
 class Gutt(Person):
+    __STØRSTE_FART = 100 / 11
+    __MINSTE_FART = 100 / 13
+
     def __init__(self, hastighet: Optional[float] = None) -> None:
         if not hastighet:
             # gir personen en tilfelldig hastighet fra intervallet
-            hastighet = GUTT_MINSTE_FART + random.random() * (
-                GUTT_STØRSTE_FART - GUTT_MINSTE_FART
-            )
+            hastighet = random.uniform(self.__MINSTE_FART, self.__STØRSTE_FART)
         super().__init__(hastighet)
         self.kjønn = "gutt"
 
@@ -112,7 +109,7 @@ class Idrettsklubb:
         self._jenter: list[Jente] = []
         self._gutter: list[Gutt] = []
 
-    def leg_til_medlem(self, person: Person) -> None:
+    def legg_til_medlem(self, person: Person) -> None:
         self.medlemmer.append(person)
         if person.kjønn == "jente":
             self._jenter.append(person)
@@ -120,6 +117,19 @@ class Idrettsklubb:
             self._gutter.append(person)
 
     def trekk_lag(self, lag_størrelse: int, antall_lag: int) -> list[Lag]:
+        """Trekker ut tilfeldige lag
+
+        Parameters
+        ----------
+        lag_st : _type_
+            Størrelsen av hvert lag (må være partall slik at lagene blir rettferdige)
+        antall_lag : int
+            Hvor mange lag som skal trekkes
+
+        Returns
+        -------
+        list[Lag]
+        """
         assert (
             lag_størrelse % 2 == 0
         ), "Lag størrelse må være partall for rettferdige lag"
@@ -133,6 +143,7 @@ class Idrettsklubb:
 
         lag = []
 
+        # trekker tilfeldige lag hvor 50% er gutter og 50% er jenter
         for x in range(0, (lag_størrelse // 2) * antall_lag, lag_størrelse // 2):
             lag.append(
                 Lag(

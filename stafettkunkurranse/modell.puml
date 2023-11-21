@@ -29,6 +29,8 @@ class Lag {
 class Person {
     + kjønn: string = udefinert
     # hastighet: float
+    - minimum_hastighet: float
+    - maksimum_hastighet: float
 
     + løp(lengde: float) -> float
 }
@@ -44,10 +46,10 @@ class Gutt {
 Person <|-- Jente
 Person <|-- Gutt
 
-Idrettsklubb "0..1" -- "1..*" Person
+Idrettsklubb "0..1" --o "1..*" Person
 
 Stafettkonkurranse "1" --o "1..*" Lag
-Lag "1" o-- "1..*" Person
+Lag "1" --o "1..*" Person
 
 
 @enduml
