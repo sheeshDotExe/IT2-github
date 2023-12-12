@@ -20,14 +20,14 @@ def main() -> None:
 
     # task 1. 100 throws
     throws = random_throws(100)
-    plt.plot(x, throws)
+    plt.scatter(x, throws)
     plt.savefig(path.join(BASE_PATH, "dice-throws-100.png"))
     plt.show()
 
     # task 2. Variable amount of throws
     number_of_throws = int(input("How many throws? "))
     throws = random_throws(number_of_throws=number_of_throws)
-    plt.plot(x, throws)
+    plt.scatter(x, throws)
     plt.savefig(path.join(BASE_PATH, f"dice-throws-{number_of_throws}.png"))
     plt.show()
 
