@@ -25,6 +25,9 @@ def main() -> None:
     # same plot
     for y, label in zip((y1, y2, y3), labels):
         plt.plot(x, y, label=label)
+
+    plt.axhline(y=0, color="black")
+    plt.axvline(x=0, color="black")
     plt.title("Grafen til f(x), f'(x) og f''(x)")
     plt.legend()
 
@@ -42,6 +45,8 @@ def main() -> None:
         ax[index].set_title(label)
         ax[index].plot(x, y, color, label=label)
         ax[index].legend()
+        ax[index].axhline(y=0, color="black")
+        ax[index].axvline(x=0, color="black")
 
     fig.suptitle("Grafen til f(x), f'(x) og f''(x)")
     plt.subplots_adjust(top=0.85)
