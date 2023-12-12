@@ -1,0 +1,59 @@
+@startuml modell
+
+class Eier {
+    # navn: string
+}
+
+
+class Platesamling{
+    + legg_til_artist(artist: Artist)
+    + legg_til_album(album: Album)
+
+    + vis_album_info()
+    + vis_plate_oversikt()
+    + vis_artist_oversikt(artist_navn: Optional[String])
+}
+
+class CD {
+    + info() -> string
+}
+
+class Vinyl{
+    # RPM: int
+    # Farge: string
+
+    + info() -> string
+}
+
+class Album{
+    + navn: string
+    + utgivelsesår: string
+
+    + info() -> string
+}
+
+class Artist {
+    # navn: string
+    # alder: int
+
+    + vis_album()
+}
+
+class Plateselskap {
+    # navn: string
+
+    + registrer_album(album: Album)
+}
+
+Eier "1..*" o-- "0..*" Platesamling
+
+Platesamling "0..1" -- "0..*" Album
+Platesamling "0..1" -- "0..*" Artist
+
+Album "0..1" --|> "0..*" CD
+Album "0..1" --|> "0..*" Vinyl
+
+Artist "1..*" -- "0..*" Album
+Plateselskap "1" -- "0..*" Album
+
+@enduml
