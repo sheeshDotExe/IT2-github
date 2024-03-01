@@ -1,0 +1,43 @@
+@startuml pong
+
+class Game{
+    -board: Board
+
+    #draw_scores()
+    +update()
+    +start()
+}
+
+class Board{
+    -ball: Ball
+    -paddles: Tuple[Paddle, Paddle]
+    -scores: Tuple[int, int]
+
+    +get_scores()
+    +check_collision()
+    +draw()
+    +update(directions: str[])
+}
+
+class Ball{
+    -position: Tuple[int, int]
+    -velocity: Tuple[int, int]
+
+    +set_velocity(velocity: Tuple[int, int])
+    +draw()
+    +update()
+}
+
+class Paddle{
+    -position: int
+    -velocity: int
+
+    +move(direction: str)
+    +draw()
+}
+
+Game "1"..."1" Board
+Board "1"..."1" Ball
+Board "1"..."2" Paddle
+
+@enduml

@@ -1,0 +1,81 @@
+@startuml pac troll
+
+skinparam linetype ortho
+
+class Game{
+    +int score
+    +bool running
+
+    -float player_base_speed
+
+    -Board board
+    -Player player
+
+    ---
+    -void draw_game_info()
+
+    -void update()
+    -void setup_game()
+    +void start_game()
+}
+
+class Board{
+    +int width
+    +int height
+
+    -int number_of_food
+
+    #Food[] food
+    #Obsticle[] obsticles
+
+    
+    ---
+    #void setup_board()
+    +void draw()
+
+    #tuple[int, int] get_random_position()
+
+    +bool in_bounds(player: Troll)
+    +bool food_collision(player: Troll)
+    +bool obsticle_collision(player: Troll)
+}
+
+class Troll{
+    #bool alive
+    +float speed
+    +str direction
+    #bool immune
+
+    ---
+    +void move()
+    +void set_direction(direction: str)
+}
+
+class Food{
+}
+
+class Obsticle{
+}
+
+class Entity {
+    #str symbol
+    #tuple color
+
+    ---
+    +void set_position(x: int, y: int)
+    +bool check_collision(other: Entity)
+    #void draw()
+
+}
+
+Game "1"---"1" Board
+Game "1"---"1" Troll
+
+Board "1"---"0..*" Food
+Board "1"---"0..*" Obsticle
+
+Troll --|> Entity
+Obsticle --|> Entity
+Food --|> Entity
+
+@enduml
