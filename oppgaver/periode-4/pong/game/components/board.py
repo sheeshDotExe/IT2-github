@@ -1,3 +1,4 @@
+from typing import Optional
 import pygame as pg
 import random
 from .ball import Ball, BALL_Y_MOVEMENT_VELOCITIES, BALL_RADIUS
@@ -65,7 +66,7 @@ class Board:
 
             self.__ball.position = self.rect.center
 
-    def update(self, directions: list[str | None]) -> None:
+    def update(self, directions: list[Optional[str]]) -> None:
         assert len(directions) == NUMBER_OF_PLAYERS
 
         self.check_collision()
