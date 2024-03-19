@@ -1,0 +1,18 @@
+@startuml Interfaces
+
+class CLI {
+    #commands: dict
+
+    + search(media_name: str)
+    + execute_command(command: str)
+    + run()
+}
+
+
+class App {
+    <<exported from internals>>
+}
+
+CLI --> App : <<use>>
+
+@enduml

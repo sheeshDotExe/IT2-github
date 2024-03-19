@@ -1,0 +1,58 @@
+@startuml Internals
+
+class App {
+    -api: API
+    -bucket_list: BucketList
+    +search_media(media_name: str, detailed: bool) -> MediaElement[]
+    +add_to_bucket_list(media_element: MediaElement)
+    +remove_from_bucket_list(media_element: MediaElement)
+    +get_bucket_list() -> MediaElement[]
+    +get_detailed(media_element: MediaElement) -> MediaElement
+}
+
+class MediaElement {
+    +title: str
+    +year: int
+    +poster: str
+    +type: str
+    #imdb_id: str
+}
+
+class MediaElementDetailed {
+    +plot: str
+    +actors: str
+    +director: str
+    +genre: str
+    +rated: str
+    +imdb_rating: float
+    +runtime: str
+    +language: str
+    +country: str
+    +awards: str
+}
+
+Class API {
+    -api_key: str
+    #chached_elements: MediaElement[]
+
+    + create_search_query(parameters: dict) -> str
+    + get_detailed(media_element: MediaElement) -> MediaElement
+    + search(media_name: str, page: int) -> MediaElement[]
+}
+
+Class BucketList {
+    -elements: MediaElement[]
+
+    + add(media_element: MediaElement)
+    + remove(media_element: MediaElement)
+    + get() -> MediaElement[]
+    + save()
+}
+
+API "1" --> "0..*" MediaElement
+App ---> API
+App ---> BucketList
+
+MediaElementDetailed -left-|> MediaElement
+
+@enduml

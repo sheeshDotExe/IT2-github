@@ -1,0 +1,25 @@
+@startuml ProjectPipeline
+
+package "Application" {
+  class "Main" as Main
+  Main -down-> Frontend
+}
+
+package "Interface"{
+    class "CLI" as CLI
+    class "GUI" as GUI
+    Frontend -down-> CLI
+}
+
+package "Internals" {
+    class "Frontend" as Frontend
+    class "API-orm" as API
+    class "BucketList" as BucketList
+    class "Backend" as Backend
+    Frontend -down-> Backend
+    Backend -down-> API
+    Backend -down-> BucketList
+}
+
+
+@enduml
