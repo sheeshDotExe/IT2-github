@@ -32,7 +32,7 @@ class API:
         query = self.create_search_query({"s": media_name})
 
         if query.url in self._cached_searches:
-            return [self._cached_searches[media_name]]
+            return self._cached_searches[query.url]
 
         result = self.__request_session.send(query, timeout=5)
         result.raise_for_status()
