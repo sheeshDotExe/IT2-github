@@ -1,4 +1,4 @@
-import cmd
+import cmd, os
 from application.internals import App
 
 
@@ -10,6 +10,18 @@ class CLI_APP(cmd.Cmd):
         super().__init__()
         self.app = app
         self.current_results = {}
+
+    def do_cls(self, line):
+        """
+        Clear the console screen.
+
+        Args:
+            line (str): The command line input.
+
+        Returns:
+            None
+        """
+        os.system("cls" if os.name == "nt" else "clear")
 
     def do_search(self, media_name: str):
         """
@@ -57,6 +69,34 @@ class CLI_APP(cmd.Cmd):
         self.app.add_to_bucket_list(media)
         print(f"{media.title} added to bucket list")
 
+    def do_check(self, id: str):
+        """
+        Mark a media as watched in the bucket list.
+
+        Args:
+            id (str): The ID of the media item to check.
+
+        Returns:
+            None
+        """
+        media = self.current_results[int(id)]
+        self.app.check_element_from_bucket_list(media)
+        print(f"{media.title} marked as watched")
+
+    def do_uncheck(self, id: str):
+        """
+        Mark a media as unwatched in the bucket list.
+
+        Args:
+            id (str): The ID of the media item to uncheck.
+
+        Returns:
+            None
+        """
+        media = self.current_results[int(id)]
+        self.app.uncheck_element_from_bucket_list(media)
+        print(f"{media.title} marked as unwatched")
+
     def do_list(self, line):
         """
         Display the list of media items in the bucket.
@@ -68,9 +108,11 @@ class CLI_APP(cmd.Cmd):
             None
         """
         self.current_results = {}
-        for index, media in enumerate(self.app.get_bucket_list()):
+        for index, (media, watch_status) in enumerate(self.app.get_bucket_list()):
             self.current_results[index + 1] = media
-            print(f"{index + 1}. {media.title} ({media.year})")
+            print(
+                f"{index + 1}. {media.title} ({media.year}) {'(watched)' if watch_status else '(not watched)'}"
+            )
 
     def do_save(self, line):
         """

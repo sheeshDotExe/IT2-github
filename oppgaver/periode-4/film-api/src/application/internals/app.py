@@ -24,6 +24,12 @@ class App:
     def remove_from_bucket_list(self, media_element: MediaElement) -> None:
         self.__bucket_list.remove(media_element)
 
+    def check_element_from_bucket_list(self, media_element: MediaElement) -> None:
+        self.__bucket_list.check(media_element)
+
+    def uncheck_element_from_bucket_list(self, media_element: MediaElement) -> None:
+        self.__bucket_list.uncheck(media_element)
+
     def save_bucket_list(self) -> None:
         self.__bucket_list.save_to_local()
 

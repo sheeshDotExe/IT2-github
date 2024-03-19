@@ -6,6 +6,8 @@ class App {
     +search_media(media_name: str, detailed: bool) -> MediaElement[]
     +add_to_bucket_list(media_element: MediaElement)
     +remove_from_bucket_list(media_element: MediaElement)
+    +check_element(media_element: MediaElement)
+    +uncheck_element(media_element: MediaElement)
     +get_bucket_list() -> MediaElement[]
     +get_detailed(media_element: MediaElement) -> MediaElement
 }
@@ -43,6 +45,8 @@ Class API {
 Class BucketList {
     -elements: MediaElement[]
 
+    + check(media_element: MediaElement)
+    + uncheck(media_element: MediaElement)
     + add(media_element: MediaElement)
     + remove(media_element: MediaElement)
     + get() -> MediaElement[]
