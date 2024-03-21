@@ -35,8 +35,9 @@ class Game:
         self.__board = Board(window=self.window, width=BOARD_WIDTH, height=BOARD_HEIGHT)
         self.clock = pg.time.Clock()
         self.last_sent = time.time()
+        self.last_recived = time.time()
         self.input_queue, self.output_queue = connect()
-        self.oponent_name = "No ops"
+        self.oponent_name = None
 
     def _draw_scores(self, scores: list[int]) -> None:
         text = DEFAULT_FONT.render(
@@ -48,6 +49,9 @@ class Game:
         self.window.blit(text, text_rect)
 
     def update(self) -> None:
+
+        if time.time() - self.last_recived > 1:
+            self.oponent_name = None
 
         if time.time() - self.last_sent > PACKET_SEND_RATE:
             send_packet(
@@ -63,6 +67,7 @@ class Game:
             self.last_sent = time.time()
 
         if not self.output_queue.empty():
+            self.last_recived = time.time()
             packet = receive_packet(self.output_queue)
             self.__board._paddles[1].rect.y = packet.paddle_y
             self.oponent_name = packet.sender
@@ -84,7 +89,8 @@ class Game:
             direction = "down"
 
         self.window.fill((0, 0, 0))
-        self.__board.update(direction=direction)
+        if self.oponent_name:
+            self.__board.update(direction=direction)
         self.__board.draw(window=self.window)
         self._draw_scores(self.__board.scores)
 

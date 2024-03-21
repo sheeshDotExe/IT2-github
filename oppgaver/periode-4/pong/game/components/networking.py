@@ -16,7 +16,7 @@ class Packet(BaseModel):
 HOST_ADDRESS = "ws://viktor.asker.shop:443/ws"
 ROOM_ID = "PONG"
 PLAYER_NAME = "Viktor"
-ROLE = "HOST2"
+ROLE = "HOST"
 
 
 def send_packet(input_queue: Queue, packet: Packet):
