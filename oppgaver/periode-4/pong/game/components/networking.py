@@ -10,7 +10,7 @@ class Packet(BaseModel):
     paddle_y: int
     ball_position: tuple[int, int]
     ball_velocity: tuple[int, int]
-    score: list[int, int]
+    score: list[int]
 
 
 HOST_ADDRESS = "ws://viktor.asker.shop:443/ws"
