@@ -10,6 +10,9 @@ from .components import (
 import pygame as pg
 import time
 
+pg.font.init()
+DEFAULT_FONT = pg.font.Font(pg.font.get_default_font(), 36)
+
 GAME_FPS = 24
 WINDOW_WIDTH, WINDOW_HEIGHT = 1000, 650
 BOARD_WIDTH, BOARD_HEIGHT = 900, 450
@@ -33,8 +36,16 @@ class Game:
         self.clock = pg.time.Clock()
         self.last_sent = time.time()
         self.input_queue, self.output_queue = connect()
+        self.oponent_name = "No ops"
 
-    def _draw_scores(self, scores: list[int]) -> None: ...
+    def _draw_scores(self, scores: list[int]) -> None:
+        text = DEFAULT_FONT.render(
+            f"{PLAYER_NAME}: {scores[0]} | {self.oponent_name}: {scores[1]}",
+            True,
+            (255, 255, 255),
+        )
+        text_rect = text.get_rect(center=(WINDOW_WIDTH // 2, 50))
+        self.window.blit(text, text_rect)
 
     def update(self) -> None:
 
@@ -46,7 +57,7 @@ class Game:
                     paddle_y=(self.__board._paddles[0].rect.y),
                     ball_position=mirror_position(self.__board._ball.position),
                     ball_velocity=mirror_velocity(self.__board._ball.velocity),
-                    score=self.__board._scores,
+                    score=self.__board._scores[::-1],
                 ),
             )
             self.last_sent = time.time()
@@ -54,6 +65,7 @@ class Game:
         if not self.output_queue.empty():
             packet = receive_packet(self.output_queue)
             self.__board._paddles[1].rect.y = packet.paddle_y
+            self.oponent_name = packet.sender
             if ROLE != "HOST":
                 self.__board._ball.position = packet.ball_position
                 self.__board._ball.velocity = packet.ball_velocity
