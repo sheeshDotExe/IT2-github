@@ -17,6 +17,14 @@ BOARD_WIDTH, BOARD_HEIGHT = 900, 450
 PACKET_SEND_RATE = 0.05
 
 
+def mirror_position(position: tuple[int, int]) -> tuple[int, int]:
+    return (WINDOW_WIDTH - position[0], position[1])
+
+
+def mirror_velocity(velocity: tuple[int, int]) -> tuple[int, int]:
+    return (-velocity[0], velocity[1])
+
+
 class Game:
     def __init__(self) -> None:
         self.window = pg.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
@@ -35,13 +43,9 @@ class Game:
                 self.input_queue,
                 Packet(
                     sender=PLAYER_NAME,
-                    paddle_y=(
-                        self.__board._paddles[0].rect.y
-                        if ROLE == "HOST"
-                        else self.__board._paddles[1].rect.y
-                    ),
-                    ball_position=self.__board._ball.position,
-                    ball_velocity=self.__board._ball.velocity,
+                    paddle_y=(self.__board._paddles[0].rect.y),
+                    ball_position=mirror_position(self.__board._ball.position),
+                    ball_velocity=mirror_velocity(self.__board._ball.velocity),
                     score=self.__board._scores,
                 ),
             )
@@ -49,28 +53,26 @@ class Game:
 
         if not self.output_queue.empty():
             packet = receive_packet(self.output_queue)
+            self.__board._paddles[1].rect.y = packet.paddle_y
             if ROLE != "HOST":
                 self.__board._ball.position = packet.ball_position
                 self.__board._ball.velocity = packet.ball_velocity
                 self.__board._scores = packet.score
-                self.__board._paddles[0].rect.y = packet.paddle_y
-            else:
-                self.__board._paddles[1].rect.y = packet.paddle_y
 
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 self.running = False
 
         keys = pg.key.get_pressed()
-        directions = [None, None]
+        direction = None
 
         if keys[pg.K_w]:
-            directions[0 if ROLE == "HOST" else 1] = "up"
+            direction = "up"
         elif keys[pg.K_s]:
-            directions[0 if ROLE == "HOST" else 1] = "down"
+            direction = "down"
 
         self.window.fill((0, 0, 0))
-        self.__board.update(directions=directions)
+        self.__board.update(direction=direction)
         self.__board.draw(window=self.window)
         self._draw_scores(self.__board.scores)
 

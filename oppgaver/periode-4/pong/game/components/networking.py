@@ -53,7 +53,7 @@ class NetworkedClient:
             print(f"Error sending packet: {e}")
 
     def on_open(self, ws: websocket.WebSocketApp, input_queue: Queue):
-        print("Opened connection")
+        print("Connected to server")
         ws.send_text(ROOM_ID)
         threading.Thread(target=self.send_packets, args=(ws, input_queue)).start()
 
@@ -61,7 +61,6 @@ class NetworkedClient:
         try:
             packet_json = json.loads(message)
             packet = Packet(**packet_json)
-            print(f"received packet: {message}")
             output_queue.put_nowait(message)
         except json.JSONDecodeError:
             print("Invalid packet received")

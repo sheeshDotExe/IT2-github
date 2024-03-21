@@ -66,17 +66,14 @@ class Board:
 
             self._ball.position = self.rect.center
 
-    def update(self, directions: list[Optional[str]]) -> None:
-        assert len(directions) == NUMBER_OF_PLAYERS
-
+    def update(self, direction: Optional[str]) -> None:
         self.check_collision()
 
         # update the ball
         self._ball.update()
 
         # update the paddles
-        for i, paddle in enumerate(self._paddles):
-            paddle.move(directions[i], border_rect=self.rect)
+        self._paddles[0].move(direction, border_rect=self.rect)
 
     def draw(self, window) -> None:
         # draw the border of the board
