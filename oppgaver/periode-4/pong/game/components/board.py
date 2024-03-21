@@ -10,6 +10,8 @@ BORDER_COLOR = (0, 255, 0)
 PADDLE_WIDTH = 20
 PADDLE_HEIGHT = 100
 
+ACCELERATION = 3
+
 
 class Board:
     def __init__(self, window, width, height) -> None:
@@ -44,7 +46,10 @@ class Board:
             self._ball.position[1] <= self.rect.top + BALL_RADIUS
             or self._ball.position[1] >= self.rect.bottom - BALL_RADIUS
         ):
-            self._ball.velocity = (self._ball.velocity[0], -self._ball.velocity[1])
+            self._ball.velocity = (
+                self._ball.velocity[0] + ACCELERATION,
+                -self._ball.velocity[1],
+            )
 
         # check if ball collides with the paddles
         for i, paddle in enumerate(self._paddles):
@@ -65,6 +70,7 @@ class Board:
                 self._scores[0] += 1
 
             self._ball.position = self.rect.center
+            self._ball.velocity = (10, random.choice(BALL_Y_MOVEMENT_VELOCITIES))
 
     def update(self, direction: Optional[str]) -> None:
         self.check_collision()
