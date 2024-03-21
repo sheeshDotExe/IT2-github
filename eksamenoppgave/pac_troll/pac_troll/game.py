@@ -1,4 +1,14 @@
-from .globals import *
+import pygame as pg
+from .globals import (
+    PLAYER_SPEED_INCREMENT,
+    PLAYER_START_SPEED,
+    WIDTH,
+    HEIGHT,
+    FRAME_RATE,
+    BASE_FONT,
+    SCORE_TEXT_COLOR,
+    GAME_OVER_TEXT_COLOR,
+)
 from .board import Board
 from .entities import Troll
 
@@ -70,6 +80,7 @@ class Game:
         Updates the game state, including player movement, collisions, and event handling.
         """
         self.board.draw(self.screen)
+
         self.player.move()
         self.player.draw(self.screen)
 

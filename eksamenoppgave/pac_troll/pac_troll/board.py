@@ -1,4 +1,11 @@
-from .globals import *
+import random
+import pygame as pg
+from .globals import (
+    BOARD_BACKGROUND_COLOR,
+    GAME_OBJECT_HEIGHT,
+    GAME_OBJECT_WIDTH,
+    NUMBER_OF_FOOD,
+)
 from .entities import Food
 from .entities import Obsticle
 

@@ -16,7 +16,7 @@ class Board:
         self.image = pg.Surface((width, height))
         self.rect = self.image.get_rect(center=window.get_rect().center)
 
-        self.__ball = Ball(
+        self._ball = Ball(
             position=self.rect.center,
             initial_velocity=(10, random.choice(BALL_Y_MOVEMENT_VELOCITIES)),
         )
@@ -26,45 +26,45 @@ class Board:
             (self.rect.right - 30, self.rect.centery),
         ]
 
-        self.__paddles = [
+        self._paddles = [
             Paddle(
                 position=paddle_positions[i], dimensions=(PADDLE_WIDTH, PADDLE_HEIGHT)
             )
             for i in range(NUMBER_OF_PLAYERS)
         ]
-        self.__scores = [0 for _ in range(NUMBER_OF_PLAYERS)]
+        self._scores = [0 for _ in range(NUMBER_OF_PLAYERS)]
 
     @property
     def scores(self) -> list[int]:
-        return self.__scores
+        return self._scores
 
     def check_collision(self):
         # check if ball collides with the top or bottom of the board
         if (
-            self.__ball.position[1] <= self.rect.top + BALL_RADIUS
-            or self.__ball.position[1] >= self.rect.bottom - BALL_RADIUS
+            self._ball.position[1] <= self.rect.top + BALL_RADIUS
+            or self._ball.position[1] >= self.rect.bottom - BALL_RADIUS
         ):
-            self.__ball.velocity = (self.__ball.velocity[0], -self.__ball.velocity[1])
+            self._ball.velocity = (self._ball.velocity[0], -self._ball.velocity[1])
 
         # check if ball collides with the paddles
-        for i, paddle in enumerate(self.__paddles):
-            if paddle.rect.collidepoint(*self.__ball.position):
-                self.__ball.velocity = (
-                    -self.__ball.velocity[0],
+        for i, paddle in enumerate(self._paddles):
+            if paddle.rect.collidepoint(*self._ball.position):
+                self._ball.velocity = (
+                    -self._ball.velocity[0],
                     random.choice(BALL_Y_MOVEMENT_VELOCITIES),
                 )
 
         # check if ball collides with the left or right of the board
         if (
-            self.__ball.position[0] <= self.rect.left
-            or self.__ball.position[0] >= self.rect.right
+            self._ball.position[0] <= self.rect.left
+            or self._ball.position[0] >= self.rect.right
         ):
-            if self.__ball.position[0] <= self.rect.left:
-                self.__scores[1] += 1
+            if self._ball.position[0] <= self.rect.left:
+                self._scores[1] += 1
             else:
-                self.__scores[0] += 1
+                self._scores[0] += 1
 
-            self.__ball.position = self.rect.center
+            self._ball.position = self.rect.center
 
     def update(self, directions: list[Optional[str]]) -> None:
         assert len(directions) == NUMBER_OF_PLAYERS
@@ -72,10 +72,10 @@ class Board:
         self.check_collision()
 
         # update the ball
-        self.__ball.update()
+        self._ball.update()
 
         # update the paddles
-        for i, paddle in enumerate(self.__paddles):
+        for i, paddle in enumerate(self._paddles):
             paddle.move(directions[i], border_rect=self.rect)
 
     def draw(self, window) -> None:
@@ -88,8 +88,8 @@ class Board:
         )
 
         # draw the ball
-        self.__ball.draw(window)
+        self._ball.draw(window)
 
         # draw the paddles
-        for paddle in self.__paddles:
+        for paddle in self._paddles:
             paddle.draw(window)

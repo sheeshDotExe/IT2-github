@@ -1,9 +1,20 @@
-from .components import Board
+from .components import (
+    Board,
+    connect,
+    send_packet,
+    receive_packet,
+    Packet,
+    PLAYER_NAME,
+    ROLE,
+)
 import pygame as pg
+import time
 
 GAME_FPS = 24
 WINDOW_WIDTH, WINDOW_HEIGHT = 1000, 650
 BOARD_WIDTH, BOARD_HEIGHT = 900, 450
+
+PACKET_SEND_RATE = 0.05
 
 
 class Game:
@@ -12,10 +23,34 @@ class Game:
         self.window.fill((0, 0, 0))
         self.__board = Board(window=self.window, width=BOARD_WIDTH, height=BOARD_HEIGHT)
         self.clock = pg.time.Clock()
+        self.last_sent = time.time()
+        self.input_queue, self.output_queue = connect()
 
     def _draw_scores(self, scores: list[int]) -> None: ...
 
     def update(self) -> None:
+
+        if time.time() - self.last_sent > PACKET_SEND_RATE:
+            send_packet(
+                self.input_queue,
+                Packet(
+                    sender=PLAYER_NAME,
+                    paddle_y=self.__board._paddles[0].rect.y,
+                    ball_position=self.__board._ball.position,
+                    ball_velocity=self.__board._ball.velocity,
+                    score=self.__board._scores,
+                ),
+            )
+            self.last_sent = time.time()
+
+        if not self.output_queue.empty():
+            packet = receive_packet(self.output_queue)
+            self.__board._paddles[1].rect.y = packet.paddle_y
+            if ROLE != "HOST":
+                self.__board._ball.position = packet.ball_position
+                self.__board._ball.velocity = packet.ball_velocity
+                self.__board._scores = packet.score
+
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 self.running = False
