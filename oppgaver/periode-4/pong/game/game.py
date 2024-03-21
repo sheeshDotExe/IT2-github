@@ -65,14 +65,9 @@ class Game:
         directions = [None, None]
 
         if keys[pg.K_w]:
-            directions[0] = "up"
+            directions[0 if ROLE == "HOST" else 1] = "up"
         elif keys[pg.K_s]:
-            directions[0] = "down"
-
-        if keys[pg.K_UP]:
-            directions[1] = "up"
-        elif keys[pg.K_DOWN]:
-            directions[1] = "down"
+            directions[0 if ROLE == "HOST" else 1] = "down"
 
         self.window.fill((0, 0, 0))
         self.__board.update(directions=directions)
