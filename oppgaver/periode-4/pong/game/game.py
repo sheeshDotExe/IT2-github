@@ -35,7 +35,11 @@ class Game:
                 self.input_queue,
                 Packet(
                     sender=PLAYER_NAME,
-                    paddle_y=self.__board._paddles[0].rect.y,
+                    paddle_y=(
+                        self.__board._paddles[0].rect.y
+                        if ROLE == "HOST"
+                        else self.__board._paddles[1].rect.y
+                    ),
                     ball_position=self.__board._ball.position,
                     ball_velocity=self.__board._ball.velocity,
                     score=self.__board._scores,
@@ -45,11 +49,13 @@ class Game:
 
         if not self.output_queue.empty():
             packet = receive_packet(self.output_queue)
-            self.__board._paddles[1].rect.y = packet.paddle_y
             if ROLE != "HOST":
                 self.__board._ball.position = packet.ball_position
                 self.__board._ball.velocity = packet.ball_velocity
                 self.__board._scores = packet.score
+                self.__board._paddles[0].rect.y = packet.paddle_y
+            else:
+                self.__board._paddles[1].rect.y = packet.paddle_y
 
         for event in pg.event.get():
             if event.type == pg.QUIT:
