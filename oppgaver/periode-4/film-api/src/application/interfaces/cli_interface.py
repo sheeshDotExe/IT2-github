@@ -11,6 +11,10 @@ class CLI_APP(cmd.Cmd):
         self.app = app
         self.current_results = {}
 
+    def postcmd(self, stop: bool, line: str) -> bool:
+        print()
+        return stop
+
     def do_cls(self, line):
         """
         Clear the console screen.
@@ -51,9 +55,11 @@ class CLI_APP(cmd.Cmd):
         """
         media = self.current_results[int(id)]
         detailed = self.app.get_detailed(media)
+        image = self.app.get_media_image(media)
         print(
-            f"Title: {media.title} Rating: {detailed.imdb_rating} Plot: {detailed.plot}"
+            f"Title: {media.title}\nRating: {detailed.imdb_rating}\nPlot: {detailed.plot}"
         )
+        print(image)
 
     def do_add(self, id: str):
         """
@@ -68,6 +74,20 @@ class CLI_APP(cmd.Cmd):
         media = self.current_results[int(id)]
         self.app.add_to_bucket_list(media)
         print(f"{media.title} added to bucket list")
+
+    def do_remove(self, id: str):
+        """
+        Remove a media item from the bucket list.
+
+        Args:
+            id (str): The ID of the media item to remove.
+
+        Returns:
+            None
+        """
+        media = self.current_results[int(id)]
+        self.app.remove_from_bucket_list(media)
+        print(f"{media.title} removed from bucket list")
 
     def do_check(self, id: str):
         """

@@ -1,12 +1,16 @@
-import os
+import os, io
 import requests
+import climage
+import numpy as np
+from PIL import Image
 from requests.models import PreparedRequest
 from .media_elements import MediaElement, MediaElementDetailed
-from .media_elements import MovieElement, SeriesElement
+from .media_elements import MovieElement, SeriesElement, GameElement
 
 MEDIA_TYPE_TO_ELEMENT = {
     "movie": MovieElement,
     "series": SeriesElement,
+    "game": GameElement,
 }
 
 
@@ -58,3 +62,11 @@ class API:
         data = MEDIA_TYPE_TO_ELEMENT[media_element.media_type](**result.json())
         self._cached_elements[media_element.imdb_id] = data
         return data
+
+    def get_media_image(self, media_element: MediaElement) -> str:
+        image_content = requests.get(media_element.poster_url).content
+        img = Image.open(io.BytesIO(image_content)).convert("RGB").resize((30, 30))
+        resized_byte_array = np.array(img)
+        converted = climage.convert_array(resized_byte_array, is_unicode=True)
+
+        return converted

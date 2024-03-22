@@ -18,6 +18,9 @@ class App:
     def get_detailed(self, media_element: MediaElement) -> MediaElementDetailed:
         return self.__api.get_detailed(media_element)
 
+    def get_media_image(self, media_element: MediaElement) -> str:
+        return self.__api.get_media_image(media_element)
+
     def add_to_bucket_list(self, media_element: MediaElement) -> None:
         self.__bucket_list.add(media_element)
 

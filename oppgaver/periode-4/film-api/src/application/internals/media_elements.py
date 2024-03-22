@@ -15,7 +15,7 @@ class MediaElementDetailed(BaseModel):
     director: str = Field(alias="Director")
     genre: str = Field(alias="Genre")
     rated: str = Field(alias="Rated")
-    imdb_rating: float = Field(alias="imdbRating")
+    imdb_rating: str = Field(alias="imdbRating")
     language: str = Field(alias="Language")
     country: str = Field(alias="Country")
     awards: str = Field(alias="Awards")
@@ -29,3 +29,7 @@ class MovieElement(MediaElementDetailed):
 
 class SeriesElement(MediaElementDetailed):
     total_seasons: str = Field(alias="totalSeasons")
+
+
+class GameElement(MediaElementDetailed):
+    pass
