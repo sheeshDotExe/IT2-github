@@ -13,10 +13,10 @@ class Packet(BaseModel):
     score: list[int]
 
 
-HOST_ADDRESS = "ws://viktor.asker.shop:443/ws"
+HOST_ADDRESS = "ws://gcloud.viktorwv.dev:443/ws"
 ROOM_ID = "PONG"
 PLAYER_NAME = "Viktor"
-ROLE = "HOST"
+ROLE = "CLIENT"
 
 
 def send_packet(input_queue: Queue, packet: Packet):
