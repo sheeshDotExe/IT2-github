@@ -10,6 +10,7 @@ class CLI_APP(cmd.Cmd):
         super().__init__()
         self.app = app
         self.current_results = {}
+        self.filters = app.get_filters()
 
     def postcmd(self, stop: bool, line: str) -> bool:
         print()
@@ -63,7 +64,7 @@ class CLI_APP(cmd.Cmd):
 
     def do_add(self, id: str):
         """
-        Adds a media item to the bucket list.
+        Adds a media item to the bucket list, or a filter.
 
         Parameters:
         - id (str): The ID of the media item to add.
@@ -71,9 +72,24 @@ class CLI_APP(cmd.Cmd):
         Returns:
         None
         """
+
         media = self.current_results[int(id)]
         self.app.add_to_bucket_list(media)
         print(f"{media.title} added to bucket list")
+
+    def do_toggle(self, id: str):
+        """Toggle filter
+
+        Parameters
+        ----------
+        id : str
+            if of filter to toggle
+        """
+        filter_name = list(self.filters)[int(id) - 1]
+        self.app.toggle_filter(filter_name)
+        print(
+            f"{filter_name} filter toggled to {'on' if self.filters[filter_name] else 'off'}"
+        )
 
     def do_remove(self, id: str):
         """
@@ -146,6 +162,19 @@ class CLI_APP(cmd.Cmd):
         """
         self.app.save_bucket_list()
         print("Bucket list saved")
+
+    def do_filter(self, line):
+        """
+        Filter the bucket list based on the given criteria.
+
+        Args:
+            line (str): The command line input.
+
+        Returns:
+            None
+        """
+        for index, (filter_name, is_active) in enumerate(self.filters.items()):
+            print(f"({index+1}) {filter_name}: {'on' if is_active else 'off'}")
 
     @classmethod
     def run(cls, app: App):
