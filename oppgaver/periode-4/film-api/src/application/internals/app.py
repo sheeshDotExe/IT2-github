@@ -39,7 +39,7 @@ class App:
         self.__bucket_list.save_to_local()
 
     def get_bucket_list(self) -> list[MediaElement]:
-        return self.__filter.apply_filters(self.__bucket_list.get())
+        return self.__filter.apply_filters(self.__bucket_list.get(), key=0)
 
     def get_filters(self) -> list[str]:
         return self.__filter.filters
