@@ -1,16 +1,16 @@
 from application.internals import App
 
+app = App()
 
-def main() -> None:
-    print("Testing the app api")
 
-    app = App()
+def test_get_by_name() -> None:
     naruto_results = app.search_media("Naruto")
-    assert len(naruto_results) == app.search_media("Naruto")
-
-    for result in naruto_results:
-        detailed = app.get_detailed(result)
+    assert naruto_results
 
 
-if __name__ == "__main__":
-    main()
+def test_get_info() -> None:
+    naruto_results = app.search_media("Naruto")
+    assert naruto_results
+
+    naruto_info = app.get_detailed(naruto_results[0])
+    assert naruto_info
