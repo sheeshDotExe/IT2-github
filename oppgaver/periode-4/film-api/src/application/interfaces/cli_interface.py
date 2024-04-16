@@ -2,6 +2,22 @@ import cmd, os
 from application.internals import App
 
 
+def validate_input(excpected_type: any):
+    def decorator(func):
+        def wrapper(self, line):
+            try:
+                return func(self, excpected_type(line))
+            except ValueError:
+                print(
+                    f"Invalid input, excpected {excpected_type.__name__} got {type(line).__name__}"
+                )
+                return
+
+        return wrapper
+
+    return decorator
+
+
 class CLI_APP(cmd.Cmd):
     prompt = ">>> "
     intro = "Welcome to the media search app. Type 'help' for a list of commands"
@@ -19,24 +35,16 @@ class CLI_APP(cmd.Cmd):
     def do_cls(self, line):
         """
         Clear the console screen.
-
-        Args:
-            line (str): The command line input.
-
-        Returns:
-            None
         """
         os.system("cls" if os.name == "nt" else "clear")
 
+    @validate_input(str)
     def do_search(self, media_name: str):
         """
         Perform a search for media based on the given name.
 
         Args:
             media_name (str): The name of the media to search for.
-
-        Returns:
-            None
         """
         results = self.app.search_media(media_name)
         self.current_results = {}
@@ -44,17 +52,15 @@ class CLI_APP(cmd.Cmd):
             self.current_results[index + 1] = result
             print(f"{index + 1}. {result.title} ({result.year})")
 
-    def do_info(self, id: str):
+    @validate_input(int)
+    def do_info(self, id: int):
         """
         Display detailed information about a media item.
 
         Parameters:
-        - id (str): The ID of the media item to display information for.
-
-        Returns:
-        None
+        - id (int): The ID of the media item to display information for.
         """
-        media = self.current_results[int(id)]
+        media = self.current_results[id]
         detailed = self.app.get_detailed(media)
         image = self.app.get_media_image(media)
         print(
@@ -62,86 +68,73 @@ class CLI_APP(cmd.Cmd):
         )
         print(image)
 
-    def do_add(self, id: str):
+    @validate_input(int)
+    def do_add(self, id: int):
         """
         Adds a media item to the bucket list, or a filter.
 
         Parameters:
-        - id (str): The ID of the media item to add.
-
-        Returns:
-        None
+        - id (int): The ID of the media item to add.
         """
 
-        media = self.current_results[int(id)]
+        media = self.current_results[id]
         self.app.add_to_bucket_list(media)
         print(f"{media.title} added to bucket list")
 
-    def do_toggle(self, id: str):
+    @validate_input(int)
+    def do_toggle(self, id: int):
         """Toggle filter
 
         Parameters
         ----------
-        id : str
+        id : int
             if of filter to toggle
         """
-        filter_name = list(self.filters)[int(id) - 1]
+        filter_name = list(self.filters)[id - 1]
         self.app.toggle_filter(filter_name)
         print(
             f"{filter_name} filter toggled to {'on' if self.filters[filter_name] else 'off'}"
         )
 
-    def do_remove(self, id: str):
+    @validate_input(int)
+    def do_remove(self, id: int):
         """
         Remove a media item from the bucket list.
 
         Args:
-            id (str): The ID of the media item to remove.
-
-        Returns:
-            None
+            id (int): The ID of the media item to remove.
         """
-        media = self.current_results[int(id)]
+        media = self.current_results[id]
         self.app.remove_from_bucket_list(media)
         print(f"{media.title} removed from bucket list")
 
-    def do_check(self, id: str):
+    @validate_input(int)
+    def do_check(self, id: int):
         """
         Mark a media as watched in the bucket list.
 
         Args:
-            id (str): The ID of the media item to check.
-
-        Returns:
-            None
+            id (int): The ID of the media item to check.
         """
-        media = self.current_results[int(id)]
+        media = self.current_results[id]
         self.app.check_element_from_bucket_list(media)
         print(f"{media.title} marked as watched")
 
-    def do_uncheck(self, id: str):
+    @validate_input(int)
+    def do_uncheck(self, id: int):
         """
         Mark a media as unwatched in the bucket list.
 
         Args:
-            id (str): The ID of the media item to uncheck.
-
-        Returns:
-            None
+            id (int): The ID of the media item to uncheck.
         """
-        media = self.current_results[int(id)]
+        media = self.current_results[id]
         self.app.uncheck_element_from_bucket_list(media)
         print(f"{media.title} marked as unwatched")
 
     def do_list(self, line):
         """
         Display the list of media items in the bucket.
-
-        Args:
-            line (str): The command line input.
-
-        Returns:
-            None
         """
         self.current_results = {}
         for index, (media, watch_status) in enumerate(self.app.get_bucket_list()):
@@ -153,25 +146,13 @@ class CLI_APP(cmd.Cmd):
     def do_save(self, line):
         """
         Save the bucket list to a local file.
-
-        Args:
-            line (str): The command line input.
-
-        Returns:
-            None
         """
         self.app.save_bucket_list()
         print("Bucket list saved")
 
     def do_filter(self, line):
         """
-        Filter the bucket list based on the given criteria.
-
-        Args:
-            line (str): The command line input.
-
-        Returns:
-            None
+        Show all available filters and their status.
         """
         for index, (filter_name, is_active) in enumerate(self.filters.items()):
             print(f"({index+1}) {filter_name}: {'on' if is_active else 'off'}")
