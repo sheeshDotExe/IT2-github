@@ -13,6 +13,7 @@ def validate_input(excpected_type: any):
                 )
                 return
 
+        wrapper.__doc__ = func.__doc__
         return wrapper
 
     return decorator
